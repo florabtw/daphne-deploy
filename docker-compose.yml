@@ -1,0 +1,41 @@
+version: "3"
+services:
+  blog:
+    container_name: blog
+    environment:
+      - url=https://blog.nick.exposed
+    image: ghost:2.31.1
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.blog.rule=Host(`blog.nick.exposed`)"
+      - "traefik.http.routers.blog.entrypoints=websecure"
+      - "traefik.http.routers.blog.tls.certresolver=default"
+      - "traefik.http.routers.blog.middlewares=redirectscheme"
+      - "traefik.http.middlewares.redirectscheme.redirectscheme.scheme=https"
+    restart: always
+    volumes:
+      - /opt/ghost/content:/var/lib/ghost/content
+  proxy:
+    command:
+      - "--api.insecure=true"
+      - "--certificatesresolvers.default.acme.httpchallenge=true"
+      - "--certificatesresolvers.default.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.default.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - "--certificatesresolvers.default.acme.email=me@nick.exposed"
+      - "--certificatesresolvers.default.acme.storage=./acme.json"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--log.level=DEBUG"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedByDefault=false"
+      - "--providers.docker.watch=true"
+    container_name: proxy
+    image: traefik:v2.0
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /opt/traefik/acme.json:/acme.json
