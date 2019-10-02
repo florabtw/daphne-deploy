@@ -25,33 +25,45 @@ logs () {
 pull () {
   local OPTIND
 
-  while getopts "a" option; do
+  while getopts "bp" option; do
     case "$option" in
-      a) pull_acme;;
+      b) pull_blog;;
+      p) pull_proxy;;
     esac
   done
 }
 
-pull_acme () {
+pull_blog () {
+  mkdir -p blog/content
+  docker-machine scp -r $MACHINE_NAME:/opt/ghost/content/images blog/content
+}
+
+pull_proxy () {
   docker-machine scp $MACHINE_NAME:/opt/traefik/acme.json acme.json
 }
 
 push () {
   local OPTIND
 
-  while getopts "a-:" option; do
+  while getopts "bp-:" option; do
     case "$option" in
       -)
         if [ "$OPTARG" == "all" ]; then
-          push_acme
+          push_proxy
         fi
         ;;
-      a) push_acme;;
+      b) push_blog;;
+      p) push_proxy;;
     esac
   done
 }
 
-push_acme () {
+push_blog () {
+  docker-machine ssh $MACHINE_NAME "mkdir -p /opt/ghost/content"
+  docker-machine scp -r blog/content/images $MACHINE_NAME:/opt/ghost/content
+}
+
+push_proxy () {
   docker-machine ssh $MACHINE_NAME "mkdir -p /opt/traefik"
   docker-machine scp acme.json $MACHINE_NAME:/opt/traefik/acme.json
   docker-machine ssh $MACHINE_NAME "chmod 600 /opt/traefik/acme.json"
