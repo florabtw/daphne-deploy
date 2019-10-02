@@ -7,11 +7,13 @@ services:
     image: ghost:2.31.1
     labels:
       - "traefik.enable=true"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.blogssl.rule=Host(`blog.nick.exposed`)"
+      - "traefik.http.routers.blogssl.entrypoints=websecure"
+      - "traefik.http.routers.blogssl.tls.certresolver=default"
       - "traefik.http.routers.blog.rule=Host(`blog.nick.exposed`)"
-      - "traefik.http.routers.blog.entrypoints=websecure"
-      - "traefik.http.routers.blog.tls.certresolver=default"
-      - "traefik.http.routers.blog.middlewares=redirectscheme"
-      - "traefik.http.middlewares.redirectscheme.redirectscheme.scheme=https"
+      - "traefik.http.routers.blog.entrypoints=web"
+      - "traefik.http.routers.blog.middlewares=redirect-to-https"
     restart: always
     volumes:
       - /opt/ghost/content:/var/lib/ghost/content
@@ -20,11 +22,13 @@ services:
     image: ncpierson/nick.exposed:1.0.1
     labels:
       - "traefik.enable=true"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.dashssl.rule=Host(`nick.exposed`)"
+      - "traefik.http.routers.dashssl.entrypoints=websecure"
+      - "traefik.http.routers.dashssl.tls.certresolver=default"
       - "traefik.http.routers.dash.rule=Host(`nick.exposed`)"
-      - "traefik.http.routers.dash.entrypoints=websecure"
-      - "traefik.http.routers.dash.tls.certresolver=default"
-      - "traefik.http.routers.dash.middlewares=redirectscheme"
-      - "traefik.http.middlewares.redirectscheme.redirectscheme.scheme=https"
+      - "traefik.http.routers.dash.entrypoints=web"
+      - "traefik.http.routers.dash.middlewares=redirect-to-https"
     restart: always
   proxy:
     command:
