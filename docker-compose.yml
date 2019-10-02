@@ -15,6 +15,17 @@ services:
     restart: always
     volumes:
       - /opt/ghost/content:/var/lib/ghost/content
+  dashboard:
+    container_name: dashboard
+    image: ncpierson/nick.exposed:1.0.1
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dash.rule=Host(`nick.exposed`)"
+      - "traefik.http.routers.dash.entrypoints=websecure"
+      - "traefik.http.routers.dash.tls.certresolver=default"
+      - "traefik.http.routers.dash.middlewares=redirectscheme"
+      - "traefik.http.middlewares.redirectscheme.redirectscheme.scheme=https"
+    restart: always
   proxy:
     command:
       - "--api.insecure=true"
