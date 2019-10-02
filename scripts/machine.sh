@@ -22,6 +22,10 @@ logs () {
   docker-compose logs $@
 }
 
+ps () {
+  docker-compose ps
+}
+
 pull () {
   local OPTIND
 
@@ -81,6 +85,14 @@ recreate () {
     $@
 }
 
+start () {
+  docker-compose start $@
+}
+
+stop () {
+  docker-compose stop $@
+}
+
 use_machine () {
   eval $(docker-machine env $MACHINE_NAME)
 }
@@ -112,6 +124,10 @@ case "$COMMAND" in
     use_machine
     logs $@
     ;;
+  ps)
+    use_machine
+    ps
+    ;;
   pull)
     pull $@
     ;;
@@ -125,6 +141,14 @@ case "$COMMAND" in
   restart)
     use_machine
     restart $@
+    ;;
+  start)
+    use_machine
+    start $@
+    ;;
+  stop)
+    use_machine
+    stop $@
     ;;
   up)
     use_machine
