@@ -54,3 +54,16 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /opt/traefik/acme.json:/acme.json
+  resume:
+    container_name: resume
+    image: ncpierson/resume:1.0.0
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.resumessl.rule=Host(`resume.nick.exposed`)"
+      - "traefik.http.routers.resumessl.entrypoints=websecure"
+      - "traefik.http.routers.resumessl.tls.certresolver=default"
+      - "traefik.http.routers.resume.rule=Host(`resume.nick.exposed`)"
+      - "traefik.http.routers.resume.entrypoints=web"
+      - "traefik.http.routers.resume.middlewares=redirect-to-https"
+    restart: always
