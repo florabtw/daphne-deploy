@@ -20,6 +20,23 @@ services:
       - "traefik.http.routers.dash.entrypoints=websecure"
       - "traefik.http.routers.dash.tls.certresolver=default"
     restart: always
+  fashionscape-api:
+    container_name: fashionscape-api
+    image: ncpierson/fashionscape-api:0.3.2
+    labels:
+      - "traefik.http.routers.fashionscape-api.rule=Host(`api.scape.fashion`)"
+      - "traefik.http.routers.fashionscape-api.entrypoints=websecure"
+      - "traefik.http.routers.fashionscape-api.tls.certresolver=default"
+      - "traefik.http.services.fashionscape-api.loadbalancer.server.port=8000"
+    restart: always
+  fashionscape-web:
+    container_name: fashionscape-web
+    image: ncpierson/fashionscape-web:0.3.3
+    labels:
+      - "traefik.http.routers.fashionscape-web.rule=Host(`scape.fashion`)"
+      - "traefik.http.routers.fashionscape-web.entrypoints=websecure"
+      - "traefik.http.routers.fashionscape-web.tls.certresolver=default"
+    restart: always
   proxy:
     command:
       - "--api.insecure=true"
