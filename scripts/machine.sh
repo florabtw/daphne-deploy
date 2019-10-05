@@ -89,16 +89,16 @@ push_soundoftext () {
   docker-machine scp -r soundoftext/db $MACHINE_NAME:/opt/soundoftext/
 }
 
-restart () {
-  docker-compose restart $@
-}
-
 recreate () {
   docker-compose up      \
     --force-recreate     \
     --renew-anon-volumes \
     --detach             \
     $@
+}
+
+restart () {
+  docker-compose restart $@
 }
 
 start () {
