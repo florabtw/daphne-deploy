@@ -47,7 +47,7 @@ services:
     restart: always
   proxy:
     command:
-      - "--api.insecure=true"
+      # - "--api.insecure=true"
       - "--certificatesresolvers.default.acme.httpchallenge=true"
       - "--certificatesresolvers.default.acme.httpchallenge.entrypoint=web"
       - "--certificatesresolvers.default.acme.email=me@nick.exposed"
