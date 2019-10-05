@@ -29,10 +29,14 @@ ps () {
 pull () {
   local OPTIND
 
-  while getopts "bp" option; do
+  while getopts "bps" option; do
     case "$option" in
       b) pull_blog;;
       p) pull_proxy;;
+      s)
+        use_machine
+        pull_soundoftext
+        ;;
     esac
   done
 }
@@ -46,10 +50,16 @@ pull_proxy () {
   docker-machine scp $MACHINE_NAME:/opt/traefik/acme.json acme.json
 }
 
+pull_soundoftext () {
+  docker exec soundoftext-db mongo --eval "db.fsyncLock()"
+  docker-machine scp -r $MACHINE_NAME:/opt/soundoftext/db soundoftext/
+  docker exec soundoftext-db mongo --eval "db.fsyncUnlock()"
+}
+
 push () {
   local OPTIND
 
-  while getopts "bp-:" option; do
+  while getopts "bps-:" option; do
     case "$option" in
       -)
         if [ "$OPTARG" == "all" ]; then
@@ -58,6 +68,7 @@ push () {
         ;;
       b) push_blog;;
       p) push_proxy;;
+      s) push_soundoftext;;
     esac
   done
 }
@@ -71,6 +82,11 @@ push_proxy () {
   docker-machine ssh $MACHINE_NAME "mkdir -p /opt/traefik"
   docker-machine scp acme.json $MACHINE_NAME:/opt/traefik/acme.json
   docker-machine ssh $MACHINE_NAME "chmod 600 /opt/traefik/acme.json"
+}
+
+push_soundoftext () {
+  docker-machine ssh $MACHINE_NAME "mkdir -p /opt/soundoftext"
+  docker-machine scp -r soundoftext/db $MACHINE_NAME:/opt/soundoftext/
 }
 
 restart () {

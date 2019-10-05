@@ -71,3 +71,31 @@ services:
       - "traefik.http.routers.resume.entrypoints=websecure"
       - "traefik.http.routers.resume.tls.certresolver=default"
     restart: always
+  soundoftext-api:
+    container_name: soundoftext-api
+    depends_on:
+      - soundoftext-db
+    env_file: soundoftext/soundoftext-api.env
+    image: ncpierson/soundoftext-api:1.0.6
+    labels:
+      - "traefik.http.routers.soundoftext-api.rule=Host(`api.soundoftext.com`)"
+      - "traefik.http.routers.soundoftext-api.entrypoints=websecure"
+      - "traefik.http.routers.soundoftext-api.tls.certresolver=default"
+      - "traefik.http.services.soundoftext-api.loadbalancer.server.port=5757"
+    restart: always
+  soundoftext-db:
+    container_name: soundoftext-db
+    image: mongo:4.2.0
+    labels:
+      - "traefik.enable=false"
+    restart: always
+    volumes:
+      - /opt/soundoftext/db:/data/db
+  soundoftext-web:
+    container_name: soundoftext-web
+    image: ncpierson/soundoftext-web:1.1.16
+    labels:
+      - "traefik.http.routers.soundoftext-web.rule=Host(`soundoftext.com`)"
+      - "traefik.http.routers.soundoftext-web.entrypoints=websecure"
+      - "traefik.http.routers.soundoftext-web.tls.certresolver=default"
+    restart: always
