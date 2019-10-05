@@ -37,6 +37,14 @@ services:
       - "traefik.http.routers.fashionscape-web.entrypoints=websecure"
       - "traefik.http.routers.fashionscape-web.tls.certresolver=default"
     restart: always
+  kaitlyn-web:
+    container_name: kaitlyn-web
+    image: ncpierson/kaitlynclink.com:1.0.2
+    labels:
+      - "traefik.http.routers.kaitlyn-web.rule=Host(`kaitlynclink.com`)"
+      - "traefik.http.routers.kaitlyn-web.entrypoints=websecure"
+      - "traefik.http.routers.kaitlyn-web.tls.certresolver=default"
+    restart: always
   proxy:
     command:
       - "--api.insecure=true"
