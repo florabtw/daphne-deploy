@@ -4,5 +4,4 @@ acme.json
 soundoftext/soundoftext-api.env
 
 blog/content
-soundoftext/soundoftext.dump
-soundoftext/db
+soundoftext/

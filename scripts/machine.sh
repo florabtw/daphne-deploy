@@ -15,7 +15,7 @@ connect () {
 }
 
 down () {
-  docker-compose down
+  docker-compose down $@
 }
 
 logs () {
@@ -101,6 +101,10 @@ restart () {
   docker-compose restart $@
 }
 
+rm () {
+  docker-compose rm -sv $@
+}
+
 start () {
   docker-compose start $@
 }
@@ -134,7 +138,7 @@ case "$COMMAND" in
     ;;
   down)
     use_machine
-    down
+    down $@
     ;;
   logs)
     use_machine
@@ -157,6 +161,10 @@ case "$COMMAND" in
   restart)
     use_machine
     restart $@
+    ;;
+  rm)
+    use_machine
+    rm $@
     ;;
   start)
     use_machine
