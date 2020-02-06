@@ -11,7 +11,7 @@ connect () {
 
   CONTAINER=${1}
 
-  docker exec -it "$CONTAINER" bash
+  docker exec -it "$CONTAINER" sh
 }
 
 down () {
