@@ -101,7 +101,7 @@ services:
       - /opt/soundoftext/db:/data/db
   soundoftext-web:
     container_name: soundoftext-web
-    image: ncpierson/soundoftext-web:1.2.0
+    image: ncpierson/soundoftext-web:1.2.3
     labels:
       - "traefik.http.routers.soundoftext-web.rule=Host(`soundoftext.com`)"
       - "traefik.http.routers.soundoftext-web.entrypoints=websecure"
