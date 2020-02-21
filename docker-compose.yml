@@ -73,7 +73,7 @@ services:
       - /opt/traefik/acme.json:/acme.json
   resume:
     container_name: resume
-    image: ncpierson/resume:1.1.0
+    image: ncpierson/resume:1.2.0
     labels:
       - "traefik.http.routers.resume.rule=Host(`resume.nick.exposed`)"
       - "traefik.http.routers.resume.entrypoints=websecure"
