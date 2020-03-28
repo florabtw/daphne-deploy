@@ -14,7 +14,7 @@ services:
       - /opt/ghost/content:/var/lib/ghost/content
   dashboard:
     container_name: dashboard
-    image: ncpierson/nick.exposed:1.2.0
+    image: ncpierson/nick.exposed:1.2.1
     labels:
       - "traefik.http.routers.dash.rule=Host(`nick.exposed`)"
       - "traefik.http.routers.dash.entrypoints=websecure"
@@ -106,4 +106,12 @@ services:
       - "traefik.http.routers.soundoftext-web.rule=Host(`soundoftext.com`)"
       - "traefik.http.routers.soundoftext-web.entrypoints=websecure"
       - "traefik.http.routers.soundoftext-web.tls.certresolver=default"
+    restart: always
+  truthordrink-web:
+    container_name: truthordrink-web
+    image: ncpierson/truthordrink-web:0.4.0
+    labels:
+      - "traefik.http.routers.truthordrink-web.rule=Host(`truthordrink.nick.exposed`)"
+      - "traefik.http.routers.truthordrink-web.entrypoints=websecure"
+      - "traefik.http.routers.truthordrink-web.tls.certresolver=default"
     restart: always
