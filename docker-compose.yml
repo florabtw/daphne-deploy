@@ -37,6 +37,14 @@ services:
       - "traefik.http.routers.fashionscape-web.entrypoints=websecure"
       - "traefik.http.routers.fashionscape-web.tls.certresolver=default"
     restart: always
+  isrebeccadope:
+    container_name: isrebeccadope
+    image: ncpierson/isrebeccadope:1.0.0
+    labels:
+      - "traefik.http.routers.isrebeccadope.rule=Host(`isrebeccadope.com`)"
+      - "traefik.http.routers.isrebeccadope.entrypoints=websecure"
+      - "traefik.http.routers.isrebeccadope.tls.certresolver=default"
+    restart: always
   kaitlyn-web:
     container_name: kaitlyn-web
     image: ncpierson/kaitlynclink.com:1.1.4
