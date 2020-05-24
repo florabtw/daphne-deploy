@@ -47,7 +47,7 @@ services:
     restart: always
   kaitlyn-web:
     container_name: kaitlyn-web
-    image: ncpierson/kaitlynclink.com:1.1.4
+    image: ncpierson/kaitlynclink.com:1.1.6
     labels:
       - "traefik.http.routers.kaitlyn-web.rule=Host(`kaitlynclink.com`)"
       - "traefik.http.routers.kaitlyn-web.entrypoints=websecure"
