@@ -23,40 +23,21 @@ services:
   fashionscape-api:
     container_name: fashionscape-api
     environment:
-      - RUNESCAPE_VERSION=oldschool
-    image: ncpierson/fashionscape-api:0.7.2
+      - RS_HOST=api.rune.scape.fashion
+    image: ncpierson/fashionscape-api:1.0.0
     labels:
-      - "traefik.http.routers.fashionscape-api.rule=Host(`api.scape.fashion`)"
+      - "traefik.http.routers.fashionscape-api.rule=Host(`api.scape.fashion`) || Host(`api.rune.scape.fashion`)"
       - "traefik.http.routers.fashionscape-api.entrypoints=websecure"
       - "traefik.http.routers.fashionscape-api.tls.certresolver=default"
       - "traefik.http.services.fashionscape-api.loadbalancer.server.port=8000"
     restart: always
   fashionscape-web:
     container_name: fashionscape-web
-    image: ncpierson/fashionscape-web:0.6.4
+    image: ncpierson/fashionscape-web:0.7.0
     labels:
-      - "traefik.http.routers.fashionscape-web.rule=Host(`scape.fashion`)"
+      - "traefik.http.routers.fashionscape-web.rule=Host(`scape.fashion`) || Host(`rune.scape.fashion`)"
       - "traefik.http.routers.fashionscape-web.entrypoints=websecure"
       - "traefik.http.routers.fashionscape-web.tls.certresolver=default"
-    restart: always
-  fashionscape-rs3-api:
-    container_name: fashionscape-rs3-api
-    environment:
-      - RUNESCAPE_VERSION=runescape
-    image: ncpierson/fashionscape-api:0.7.2
-    labels:
-      - "traefik.http.routers.fashionscape-rs3-api.rule=Host(`api.rune.scape.fashion`)"
-      - "traefik.http.routers.fashionscape-rs3-api.entrypoints=websecure"
-      - "traefik.http.routers.fashionscape-rs3-api.tls.certresolver=default"
-      - "traefik.http.services.fashionscape-rs3-api.loadbalancer.server.port=8000"
-    restart: always
-  fashionscape-rs3-web:
-    container_name: fashionscape-rs3-web
-    image: ncpierson/fashionscape-web:0.6.4
-    labels:
-      - "traefik.http.routers.fashionscape-rs3-web.rule=Host(`rune.scape.fashion`)"
-      - "traefik.http.routers.fashionscape-rs3-web.entrypoints=websecure"
-      - "traefik.http.routers.fashionscape-rs3-web.tls.certresolver=default"
     restart: always
   isrebeccadope:
     container_name: isrebeccadope
@@ -86,7 +67,7 @@ services:
       - "--log.level=INFO"
       - "--providers.docker=true"
     container_name: proxy
-    image: traefik:v2.0
+    image: traefik:v2.3
     labels:
       - "traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)"
       - "traefik.http.routers.http-catchall.entrypoints=web"
