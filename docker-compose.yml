@@ -113,7 +113,7 @@ services:
     depends_on:
       - soundoftext-db
     env_file: soundoftext/soundoftext-api.env
-    image: ncpierson/soundoftext-api:1.0.11
+    image: ncpierson/soundoftext-api:1.0.12
     labels:
       - "traefik.http.routers.soundoftext-api.rule=Host(`api.soundoftext.com`)"
       - "traefik.http.routers.soundoftext-api.entrypoints=websecure"
@@ -130,7 +130,7 @@ services:
       - /opt/soundoftext/db:/data/db
   soundoftext-web:
     container_name: soundoftext-web
-    image: ncpierson/soundoftext-web:1.2.5
+    image: ncpierson/soundoftext-web:1.2.6
     labels:
       - "traefik.http.routers.soundoftext-web.rule=Host(`soundoftext.com`)"
       - "traefik.http.routers.soundoftext-web.entrypoints=websecure"
