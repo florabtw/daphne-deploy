@@ -100,6 +100,11 @@ services:
       - "traefik.http.routers.soundoftext-api.entrypoints=websecure"
       - "traefik.http.routers.soundoftext-api.tls.certresolver=default"
       - "traefik.http.services.soundoftext-api.loadbalancer.server.port=5757"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "3"
     restart: always
   soundoftext-db:
     container_name: soundoftext-db
@@ -116,6 +121,11 @@ services:
       - "traefik.http.routers.soundoftext-web.rule=Host(`soundoftext.com`)"
       - "traefik.http.routers.soundoftext-web.entrypoints=websecure"
       - "traefik.http.routers.soundoftext-web.tls.certresolver=default"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "3"
     restart: always
   truthordrink-web:
     container_name: truthordrink-web
