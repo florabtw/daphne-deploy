@@ -33,7 +33,7 @@ services:
     restart: always
   fashionscape-web:
     container_name: fashionscape-web
-    image: ncpierson/fashionscape-web:1.0.2
+    image: ncpierson/fashionscape-web:1.0.3
     labels:
       - "traefik.http.routers.fashionscape-web.rule=Host(`scape.fashion`) || Host(`rune.scape.fashion`)"
       - "traefik.http.routers.fashionscape-web.entrypoints=websecure"
