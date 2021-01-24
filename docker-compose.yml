@@ -94,7 +94,7 @@ services:
     depends_on:
       - soundoftext-db
     env_file: soundoftext/soundoftext-api.env
-    image: ncpierson/soundoftext-api:1.1.0
+    image: ncpierson/soundoftext-api:1.1.2
     labels:
       - "traefik.http.routers.soundoftext-api.rule=Host(`api.soundoftext.com`)"
       - "traefik.http.routers.soundoftext-api.entrypoints=websecure"
