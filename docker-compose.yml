@@ -39,6 +39,30 @@ services:
       - "traefik.http.routers.fashionscape-web.entrypoints=websecure"
       - "traefik.http.routers.fashionscape-web.tls.certresolver=default"
     restart: always
+  foundry-nick:
+    container_name: foundry-nick
+    env_file: foundry-nick/foundry.env
+    image: felddy/foundryvtt:release
+    labels:
+      - "traefik.http.routers.foundry-nick.rule=Host(`nick.dnd.family`)"
+      - "traefik.http.routers.foundry-nick.entrypoints=websecure"
+      - "traefik.http.routers.foundry-nick.tls.certresolver=default"
+      - "traefik.http.services.foundry-nick.loadbalancer.server.port=30000"
+    restart: "unless-stopped"
+    volumes:
+      - /opt/foundry-nick:/data
+  foundry-ian:
+    container_name: foundry-ian
+    env_file: foundry-ian/foundry.env
+    image: felddy/foundryvtt:release
+    labels:
+      - "traefik.http.routers.foundry-ian.rule=Host(`ian.dnd.family`)"
+      - "traefik.http.routers.foundry-ian.entrypoints=websecure"
+      - "traefik.http.routers.foundry-ian.tls.certresolver=default"
+      - "traefik.http.services.foundry-ian.loadbalancer.server.port=30000"
+    restart: "unless-stopped"
+    volumes:
+      - /opt/foundry-ian:/data
   isrebeccadope:
     container_name: isrebeccadope
     image: ncpierson/isrebeccadope:1.0.0

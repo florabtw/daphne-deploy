@@ -1,7 +1,9 @@
 .gitsecret/keys/random_seed
-machine/nikki.zip
 acme.json
-soundoftext/soundoftext-api.env
 
 blog/content
 soundoftext/
+foundry-ian/foundry
+foundry-ian/foundry.env
+foundry-nick/foundry
+foundry-nick/foundry.env

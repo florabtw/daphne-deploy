@@ -29,9 +29,10 @@ ps () {
 pull () {
   local OPTIND
 
-  while getopts "bps" option; do
+  while getopts "bfps" option; do
     case "$option" in
       b) pull_blog;;
+      f) pull_foundry;;
       p) pull_proxy;;
       s)
         use_machine
@@ -44,6 +45,11 @@ pull () {
 pull_blog () {
   mkdir -p blog/content
   docker-machine scp -r $MACHINE_NAME:/opt/ghost/content blog
+}
+
+pull_foundry () {
+  docker-machine scp -r $MACHINE_NAME:/opt/foundry-ian foundry-ian
+  docker-machine scp -r $MACHINE_NAME:/opt/foundry-nick foundry-nick
 }
 
 pull_proxy () {
@@ -59,7 +65,7 @@ pull_soundoftext () {
 push () {
   local OPTIND
 
-  while getopts "bps-:" option; do
+  while getopts "bfps-:" option; do
     case "$option" in
       -)
         if [ "$OPTARG" == "all" ]; then
@@ -67,6 +73,7 @@ push () {
         fi
         ;;
       b) push_blog;;
+      f) push_foundry;;
       p) push_proxy;;
     esac
   done
@@ -75,6 +82,11 @@ push () {
 push_blog () {
   docker-machine ssh $MACHINE_NAME "mkdir -p /opt/ghost/content"
   docker-machine scp -r blog/content $MACHINE_NAME:/opt/ghost
+}
+
+push_foundry () {
+  docker-machine scp -r foundry-ian/foundry/ $MACHINE_NAME:/opt/foundry-ian/
+  docker-machine scp -r foundry-nick/foundry/ $MACHINE_NAME:/opt/foundry-nick/
 }
 
 push_proxy () {
