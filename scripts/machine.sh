@@ -43,7 +43,7 @@ pull () {
 
 pull_blog () {
   mkdir -p blog/content
-  docker-machine scp -r $MACHINE_NAME:/opt/ghost/content/images blog/content
+  docker-machine scp -r $MACHINE_NAME:/opt/ghost/content blog
 }
 
 pull_proxy () {
@@ -68,25 +68,19 @@ push () {
         ;;
       b) push_blog;;
       p) push_proxy;;
-      s) push_soundoftext;;
     esac
   done
 }
 
 push_blog () {
   docker-machine ssh $MACHINE_NAME "mkdir -p /opt/ghost/content"
-  docker-machine scp -r blog/content/images $MACHINE_NAME:/opt/ghost/content
+  docker-machine scp -r blog/content $MACHINE_NAME:/opt/ghost
 }
 
 push_proxy () {
   docker-machine ssh $MACHINE_NAME "mkdir -p /opt/traefik"
   docker-machine scp acme.json $MACHINE_NAME:/opt/traefik/acme.json
   docker-machine ssh $MACHINE_NAME "chmod 600 /opt/traefik/acme.json"
-}
-
-push_soundoftext () {
-  docker-machine ssh $MACHINE_NAME "mkdir -p /opt/soundoftext"
-  docker-machine scp -r soundoftext/db $MACHINE_NAME:/opt/soundoftext/
 }
 
 recreate () {
