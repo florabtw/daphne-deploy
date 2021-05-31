@@ -4,7 +4,7 @@ services:
     container_name: blog
     environment:
       - url=https://blog.nick.exposed
-    image: ghost:2.31.1
+    image: ghost:4
     labels:
       - "traefik.http.routers.blog.rule=Host(`blog.nick.exposed`)"
       - "traefik.http.routers.blog.entrypoints=websecure"
@@ -99,7 +99,7 @@ services:
       - /opt/traefik/acme.json:/acme.json
   resume:
     container_name: resume
-    image: ncpierson/resume:1.2.1
+    image: ncpierson/resume:1.3.0
     labels:
       - "traefik.http.routers.resume.rule=Host(`resume.nick.exposed`)"
       - "traefik.http.routers.resume.entrypoints=websecure"
