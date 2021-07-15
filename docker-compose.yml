@@ -14,7 +14,7 @@ services:
       - /opt/ghost/content:/var/lib/ghost/content
   dashboard:
     container_name: dashboard
-    image: ncpierson/nick.exposed:1.2.2
+    image: ncpierson/nick.exposed:1.3.0
     labels:
       - "traefik.http.routers.dash.rule=Host(`nick.exposed`)"
       - "traefik.http.routers.dash.entrypoints=websecure"
