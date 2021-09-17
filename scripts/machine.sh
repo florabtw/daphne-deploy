@@ -137,6 +137,10 @@ case "$COMMAND" in
     use_machine
     connect $@
     ;;
+  compose)
+    use_machine
+    docker-compose $@
+    ;;
   deploy)
     push --all
     use_machine

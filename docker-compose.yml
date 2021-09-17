@@ -24,7 +24,7 @@ services:
     container_name: fashionscape-api
     environment:
       - RS_HOST=api.rune.scape.fashion
-    image: ncpierson/fashionscape-api:1.0.3
+    image: ncpierson/fashionscape-api:1.1.0
     labels:
       - "traefik.http.routers.fashionscape-api.rule=Host(`api.scape.fashion`) || Host(`api.rune.scape.fashion`)"
       - "traefik.http.routers.fashionscape-api.entrypoints=websecure"
