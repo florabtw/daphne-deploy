@@ -2,7 +2,12 @@
 
 set -e
 
-MACHINE_NAME=nikki
+
+SSH_USER=root
+SSH_HOST=138.68.4.229
+SSH_TARGET=$SSH_USER@$SSH_HOST
+
+export DOCKER_HOST=ssh://$SSH_TARGET
 
 # Begin Functions
 
@@ -38,24 +43,27 @@ pull () {
 }
 
 pull_foundry () {
-  docker-machine scp -r $MACHINE_NAME:/opt/foundry-ian foundry-ian
-  docker-machine scp -r $MACHINE_NAME:/opt/foundry-nick foundry-nick
+  scp -r $SSH_TARGET:/opt/foundry-ian foundry-ian/foundry
+  scp -r $SSH_TARGET:/opt/foundry-nick foundry-nick/foundry
 }
 
 pull_proxy () {
-  docker-machine scp $MACHINE_NAME:/opt/traefik/acme.json acme.json
+  scp -r $SSH_TARGET:/opt/caddy/data caddy/
 }
 
 push () {
   local OPTIND
 
-  while getopts "fp-:" option; do
+  while getopts "cfp-:" option; do
     case "$option" in
       -)
         if [ "$OPTARG" == "all" ]; then
+          push_caddy
+          push_foundry
           push_proxy
         fi
         ;;
+      c) push_caddy;;
       f) push_foundry;;
       p) push_proxy;;
     esac
@@ -63,14 +71,18 @@ push () {
 }
 
 push_foundry () {
-  docker-machine scp -r foundry-ian/foundry/ $MACHINE_NAME:/opt/foundry-ian/
-  docker-machine scp -r foundry-nick/foundry/ $MACHINE_NAME:/opt/foundry-nick/
+  scp -r foundry-flora/foundry/ $SSH_TARGET:/opt/foundry-flora/
+  scp -r foundry-ian/foundry/ $SSH_TARGET:/opt/foundry-ian/
+}
+
+push_caddy () {
+  ssh $SSH_TARGET "mkdir -p /opt/caddy"
+  scp Caddyfile $SSH_TARGET:/opt/caddy
 }
 
 push_proxy () {
-  docker-machine ssh $MACHINE_NAME "mkdir -p /opt/traefik"
-  docker-machine scp acme.json $MACHINE_NAME:/opt/traefik/acme.json
-  docker-machine ssh $MACHINE_NAME "chmod 600 /opt/traefik/acme.json"
+  ssh $SSH_TARGET "mkdir -p /opt/caddy/data"
+  scp -r caddy/data $SSH_TARGET:/opt/caddy
 }
 
 recreate () {
@@ -97,10 +109,6 @@ stop () {
   docker-compose stop $@
 }
 
-use_machine () {
-  eval $(docker-machine env $MACHINE_NAME)
-}
-
 up () {
   docker-compose up -d $@
 }
@@ -111,59 +119,25 @@ COMMAND="$1"
 shift
 
 case "$COMMAND" in
-  connect)
-    use_machine
-    connect $@
-    ;;
-  compose)
-    use_machine
-    docker-compose $@
-    ;;
+  connect) connect $@;;
+  compose) docker-compose $@;;
   deploy)
     push --all
-    use_machine
     up
     ;;
-  down)
-    use_machine
-    down $@
-    ;;
-  logs)
-    use_machine
-    logs $@
-    ;;
-  ps)
-    use_machine
-    ps
-    ;;
+  down) down $@;;
+  logs) logs $@;;
+  ps) ps;;
   pull)
     pull $@
     ;;
   push)
     push $@
     ;;
-  recreate)
-    use_machine
-    recreate $@
-    ;;
-  restart)
-    use_machine
-    restart $@
-    ;;
-  rm)
-    use_machine
-    rm $@
-    ;;
-  start)
-    use_machine
-    start $@
-    ;;
-  stop)
-    use_machine
-    stop $@
-    ;;
-  up)
-    use_machine
-    up $@
-    ;;
+  recreate) recreate $@;;
+  restart) restart $@;;
+  rm) rm $@;;
+  start) start $@;;
+  stop) stop $@;;
+  up) up $@;;
 esac

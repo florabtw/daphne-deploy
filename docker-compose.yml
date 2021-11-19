@@ -5,75 +5,28 @@ services:
     environment:
       - RS_HOST=api.rune.scape.fashion
     image: ncpierson/fashionscape-api:1.1.0
-    labels:
-      - "traefik.http.routers.fashionscape-api.rule=Host(`api.scape.fashion`) || Host(`api.rune.scape.fashion`)"
-      - "traefik.http.routers.fashionscape-api.entrypoints=websecure"
-      - "traefik.http.routers.fashionscape-api.tls.certresolver=default"
-      - "traefik.http.services.fashionscape-api.loadbalancer.server.port=8000"
     restart: always
-  fashionscape-web:
-    container_name: fashionscape-web
-    image: ncpierson/fashionscape-web:1.0.3
-    labels:
-      - "traefik.http.routers.fashionscape-web.rule=Host(`scape.fashion`) || Host(`rune.scape.fashion`)"
-      - "traefik.http.routers.fashionscape-web.entrypoints=websecure"
-      - "traefik.http.routers.fashionscape-web.tls.certresolver=default"
-    restart: always
-  foundry-nick:
-    container_name: foundry-nick
-    env_file: foundry-nick/foundry.env
-    image: felddy/foundryvtt:release
-    labels:
-      - "traefik.http.routers.foundry-nick.rule=Host(`nick.dnd.family`)"
-      - "traefik.http.routers.foundry-nick.entrypoints=websecure"
-      - "traefik.http.routers.foundry-nick.tls.certresolver=default"
-      - "traefik.http.services.foundry-nick.loadbalancer.server.port=30000"
-    restart: "unless-stopped"
-    volumes:
-      - /opt/foundry-nick:/data
-  foundry-ian:
-    container_name: foundry-ian
-    env_file: foundry-ian/foundry.env
-    image: felddy/foundryvtt:release
-    labels:
-      - "traefik.http.routers.foundry-ian.rule=Host(`ian.dnd.family`)"
-      - "traefik.http.routers.foundry-ian.entrypoints=websecure"
-      - "traefik.http.routers.foundry-ian.tls.certresolver=default"
-      - "traefik.http.services.foundry-ian.loadbalancer.server.port=30000"
-    restart: "unless-stopped"
-    volumes:
-      - /opt/foundry-ian:/data
-  isrebeccadope:
-    container_name: isrebeccadope
-    image: ncpierson/isrebeccadope:1.0.0
-    labels:
-      - "traefik.http.routers.isrebeccadope.rule=Host(`isrebeccadope.com`)"
-      - "traefik.http.routers.isrebeccadope.entrypoints=websecure"
-      - "traefik.http.routers.isrebeccadope.tls.certresolver=default"
-    restart: always
+  # foundry-flora:
+  #   container_name: foundry-flora
+  #   env_file: foundry-flora/foundry.env
+  #   image: felddy/foundryvtt:release
+  #   restart: "unless-stopped"
+  #   volumes:
+  #     - /opt/foundry-flora:/data
+  # foundry-ian:
+  #   container_name: foundry-ian
+  #   env_file: foundry-ian/foundry.env
+  #   image: felddy/foundryvtt:release
+  #   restart: "unless-stopped"
+  #   volumes:
+  #     - /opt/foundry-ian:/data
   proxy:
-    command:
-      # - "--api.insecure=true"
-      - "--certificatesresolvers.default.acme.httpchallenge=true"
-      - "--certificatesresolvers.default.acme.httpchallenge.entrypoint=web"
-      - "--certificatesresolvers.default.acme.email=me@nick.exposed"
-      - "--certificatesresolvers.default.acme.storage=acme.json"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--log.level=INFO"
-      - "--providers.docker=true"
     container_name: proxy
-    image: traefik:v2.3
-    labels:
-      - "traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)"
-      - "traefik.http.routers.http-catchall.entrypoints=web"
-      - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
-      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+    image: caddy:2.4.6
     ports:
       - 80:80
       - 443:443
-      - 8080:8080
     restart: always
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /opt/traefik/acme.json:/acme.json
+      - /opt/caddy/data:/data
+      - /opt/caddy/Caddyfile:/etc/caddy/Caddyfile
