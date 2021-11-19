@@ -1,6 +1,6 @@
-# Nikki
+# Daphne
 
-This repository is to help the maintainer, [Nick Pierson](https://nick.exposed),
+This repository is to help the maintainer, [Flora Moon](https://flora.cool),
 deploy multiple services to a particular DigitalOcean Droplet.
 
 ## Dependencies
@@ -35,7 +35,7 @@ This command allows you to connect to a bash instance on any docker container.
 Example:
 
 ```
-./scripts/machine.sh connect soundoftext-web
+./scripts/machine.sh connect fashionscape-api
 ```
 
 ### down
@@ -57,7 +57,7 @@ arguments. This will display logs from all containers.
 Example:
 
 ```
-./scripts/machine.sh logs -f # soundoftext-web
+./scripts/machine.sh logs -f
 ```
 
 ### ps
@@ -78,9 +78,9 @@ again later (possibly to a different machine).
 Supported flags:
 
 ```
-./scripts/machine.sh pull -b # pulls blog content
-./scripts/machine.sh pull -p # pulls proxy data (acme.json)
-./scripts/machine.sh pull -s # pulls sound of text database
+./scripts/machine pull --all # pulls everything
+./scripts/machine pull -f    # foundry data
+./scripts/machine pull -p    # proxy data (caddy)
 ```
 
 ### push
@@ -92,9 +92,10 @@ containers. This would be used on initial deployment, or before a
 Examples:
 
 ```
-./scripts/machine.sh push -b # pushes blog content
-./scripts/machine.sh push -p # pushes proxy data (acme.json)
-./scripts/machine.sh push -s # pushes sound of text database
+./scripts/machine push --all # push everything
+./scripts/machine push -c    # Caddyfile
+./scripts/machine push -p    # proxy data (caddy)
+./scripts/machine push -f    # foundry data
 ```
 
 ### recreate
@@ -116,8 +117,8 @@ same arguments.
 Examples:
 
 ```
-./scripts/machine.sh restart # restart all containers
-./scripts/machine.sh restart soundoftext-web # restarts soundoftext-web
+./scripts/machine.sh restart                  # restart all containers
+./scripts/machine.sh restart fashionscape-api # restarts fashionscape-api
 ```
 
 ### up
@@ -143,24 +144,25 @@ This part is up to you, but for me, I have a script at
 
 ### (Optional) Pull Data from Previous Machine
 
-Edit `/.scripts/machine.sh` such that `MACHINE_NAME` points to the old machine.
+Edit `/.scripts/machine.sh` such that `SSH_TARGET` points to the old machine.
 Then run:
 
 ```
-./scripts/machine pull -p # pulls acme.json
-./scripts/machine pull -b # pulls blog content
-./scripts/machine pull -s # pulls sound of text database
+./scripts/machine pull --all # pulls everything
+./scripts/machine pull -f    # foundry data
+./scripts/machine pull -p    # proxy data (caddy)
 ```
 
 ### Push Data to New Machine
 
-Edit `/.scripts/machine.sh` such that `MACHINE_NAME` points to the new machine.
+Edit `/.scripts/machine.sh` such that `SSH_TARGET` points to the new machine.
 Then run:
 
 ```
-./scripts/machine push -p # pushes acme.json
-./scripts/machine push -b # optional
-./scripts/machine push -s # optional 
+./scripts/machine push --all # push everything
+./scripts/machine push -c    # Caddyfile
+./scripts/machine push -p    # proxy data (caddy)
+./scripts/machine push -f    # foundry data
 ```
 
 ### Deploy Sites
