@@ -29,22 +29,12 @@ ps () {
 pull () {
   local OPTIND
 
-  while getopts "bfps" option; do
+  while getopts "fp" option; do
     case "$option" in
-      b) pull_blog;;
       f) pull_foundry;;
       p) pull_proxy;;
-      s)
-        use_machine
-        pull_soundoftext
-        ;;
     esac
   done
-}
-
-pull_blog () {
-  mkdir -p blog/content
-  docker-machine scp -r $MACHINE_NAME:/opt/ghost/content blog
 }
 
 pull_foundry () {
@@ -56,32 +46,20 @@ pull_proxy () {
   docker-machine scp $MACHINE_NAME:/opt/traefik/acme.json acme.json
 }
 
-pull_soundoftext () {
-  docker exec soundoftext-db mongo --eval "db.fsyncLock()"
-  docker-machine scp -r $MACHINE_NAME:/opt/soundoftext/db soundoftext/
-  docker exec soundoftext-db mongo --eval "db.fsyncUnlock()"
-}
-
 push () {
   local OPTIND
 
-  while getopts "bfps-:" option; do
+  while getopts "fp-:" option; do
     case "$option" in
       -)
         if [ "$OPTARG" == "all" ]; then
           push_proxy
         fi
         ;;
-      b) push_blog;;
       f) push_foundry;;
       p) push_proxy;;
     esac
   done
-}
-
-push_blog () {
-  docker-machine ssh $MACHINE_NAME "mkdir -p /opt/ghost/content"
-  docker-machine scp -r blog/content $MACHINE_NAME:/opt/ghost
 }
 
 push_foundry () {
