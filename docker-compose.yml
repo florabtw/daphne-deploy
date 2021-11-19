@@ -1,17 +1,5 @@
 version: "3"
 services:
-  blog:
-    container_name: blog
-    environment:
-      - url=https://blog.nick.exposed
-    image: ghost:4
-    labels:
-      - "traefik.http.routers.blog.rule=Host(`blog.nick.exposed`)"
-      - "traefik.http.routers.blog.entrypoints=websecure"
-      - "traefik.http.routers.blog.tls.certresolver=default"
-    restart: always
-    volumes:
-      - /opt/ghost/content:/var/lib/ghost/content
   dashboard:
     container_name: dashboard
     image: ncpierson/nick.exposed:1.3.0
@@ -97,11 +85,3 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /opt/traefik/acme.json:/acme.json
-  resume:
-    container_name: resume
-    image: ncpierson/resume:1.3.0
-    labels:
-      - "traefik.http.routers.resume.rule=Host(`resume.nick.exposed`)"
-      - "traefik.http.routers.resume.entrypoints=websecure"
-      - "traefik.http.routers.resume.tls.certresolver=default"
-    restart: always
