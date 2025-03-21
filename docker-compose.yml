@@ -1,25 +1,12 @@
 version: "3"
 services:
-  fashionscape-api:
-    container_name: fashionscape-api
-    environment:
-      - RS_HOST=api.rune.scape.fashion
-    image: ncpierson/fashionscape-api:1.1.0
-    restart: always
-  # foundry-flora:
-  #   container_name: foundry-flora
-  #   env_file: foundry-flora/foundry.env
-  #   image: felddy/foundryvtt:release
-  #   restart: "unless-stopped"
-  #   volumes:
-  #     - /opt/foundry-flora:/data
-  # foundry-ian:
-  #   container_name: foundry-ian
-  #   env_file: foundry-ian/foundry.env
-  #   image: felddy/foundryvtt:release
-  #   restart: "unless-stopped"
-  #   volumes:
-  #     - /opt/foundry-ian:/data
+  foundry:
+    container_name: foundry
+    env_file: foundry.env
+    image: felddy/foundryvtt:release
+    restart: "unless-stopped"
+    volumes:
+      - /root/foundry-data:/data
   proxy:
     container_name: proxy
     image: caddy:2.4.6
@@ -28,5 +15,12 @@ services:
       - 443:443
     restart: always
     volumes:
-      - /opt/caddy/data:/data
-      - /opt/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - /root/foundry/Caddyfile:/etc/caddy/Caddyfile
+  truthordrink:
+    container_name: truthordrink
+    image: floramoon/truthordrink-web:0.6.2
+    restart: "unless-stopped"
+  sheetfacts:
+    container_name: sheetfacts
+    image: floramoon/sheet-facts-web:0.6.2
+    restart: "unless-stopped"

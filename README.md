@@ -5,16 +5,6 @@ deploy multiple services to a particular DigitalOcean Droplet.
 
 ## Dependencies
 
-In order to deploy, you will need to reveal the secrets in the repo.
-You will need your GPG key.
-You will also need to be added as a member of git secret.
-
-### Reveal secrets
-
-```
-git secret reveal
-```
-
 ### Install Dependencies
 
 ```

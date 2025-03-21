@@ -1,9 +1,4 @@
 .gitsecret/keys/random_seed
 acme.json
 
-blog/content
-soundoftext/
-foundry-ian/foundry
-foundry-ian/foundry.env
-foundry-flora/foundry
-foundry-flora/foundry.env
+*.env
